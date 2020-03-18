@@ -1,10 +1,14 @@
 import flask
 from flask import request, jsonify
+import sqlite3
 
-from game import Game
+
+from main.game import Game
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+
+Game.create_database
 
 @app.route('/', methods=['GET'])
 def home():
