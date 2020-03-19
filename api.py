@@ -1,7 +1,7 @@
 import flask
 from flask import request, jsonify
 
-from main import Game
+from main.game import Game
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -19,12 +19,13 @@ def new_game():
     return jsonify(resp)
 
 
-@app.route('/game/{id}/movement', methods=['POST'])
-def movement():
+@app.route('/game/<id>/movement', methods=['POST'])
+def movement(id):
     # try:
-
     # except GameDoesNotExist:
+    data = request.json
+    Game().play_human(id, data["player"], data["position"])
 
-    return
+    return "Show"
 
 app.run()
