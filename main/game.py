@@ -87,6 +87,12 @@ class Game:
         if game[0][1] != player:
             raise IncorrectPlayer
         current_positions = json.loads(game[0][2])
+        if self.has_won(current_positions, "X"):
+            response = {"msg": MATCH_ENDED, "winner": "X", "status_code": 200}
+            return response
+        elif self.has_won(current_positions, "O"):
+            response = {"msg": MATCH_ENDED, "winner": "O", "status_code": 200}
+            return response
         available_pos = []
         for pos in range(9):
             if current_positions[str(pos)] == 0:
@@ -101,12 +107,14 @@ class Game:
             if player == "X":
                 sql = f"UPDATE {self.table_name} SET current_player = 'O' WHERE game_id = '{game_id}'"
                 self.execute_sql(sql)
-            else:
+            elif player == "O":
                 sql = f"UPDATE {self.table_name} SET current_player = 'X' WHERE game_id = '{game_id}'"
-                self.execute_sql(sql)              
+                self.execute_sql(sql)  
+            else:
+                raise IncorrectPlayer             
             if self.has_won(current_positions, player):
                 response = {"msg": MATCH_ENDED, "winner": player, "status_code": 200}
-            elif available_pos.__le__ == 1:
+            elif len(available_pos) <= 1:
                 response = {"msg": MATCH_ENDED, "winner": "Draw", "status_code": 200}
             else:
                 response = {"msg": RECORDED_MOVE, "status_code": 200}
