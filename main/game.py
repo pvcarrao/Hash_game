@@ -31,7 +31,7 @@ class Game:
             return selected
 
     def create_table(self):
-        sql = "CREATE TABLE IF NOT EXISTS " + self.table_name + self.table_headers
+        sql = f"CREATE TABLE IF NOT EXISTS {self.table_name}{self.table_headers}"
         self.execute_sql(sql)
 
     def new_game(self):
@@ -46,28 +46,28 @@ class Game:
         return response
 
     def play_human(self, game_id, player, position_tuple):
-
         sql = f"SELECT * FROM {self.table_name} WHERE game_id = '{game_id}'"
         game = self.execute_sql(sql)
         if not game:
             raise GameDoesNotExist
-        if game[1] != player:
+        if game[0][1] != player:
             return INCORRECT_PLAYER
-        current_positions = json.loads(game[2])
+        current_positions = json.loads(game[0][2])
         avaible_pos = []
         for pos in range(9):
-            if current_positions[pos] == 0:
-                avaible_pos.append = pos
+            if current_positions[str(pos)] == 0:
+                avaible_pos.append(pos)
         # TODO: converter a tupla em número da posição
-        position_number = 0
+        position_number = 1
         
         if position_number in avaible_pos:
-            current_positions[position_number] = player
+            current_positions[str(position_number)] = player
             json_positions = json.dumps(current_positions)
-            sql = f"UPDATE {self.table_headers} SET positions = '{json_positions}' WHERE game_id = '{game_id}'"
+            sql = f"UPDATE {self.table_name} SET positions = '{json_positions}' WHERE game_id = '{game_id}'"
+            self.execute_sql(sql)
             # TODO: check if has_won
-            if has_won:
-                return [MATCH_ENDED, player]
+            # if has_won:
+            #    return [MATCH_ENDED, player]
             return RECORDED_MOVE
         else:
             return UNAVAIBLE_POSITION

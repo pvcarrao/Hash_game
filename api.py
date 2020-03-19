@@ -30,6 +30,4 @@ def movement(id):
     except GameDoesNotExist:
         return jsonify(GAME_DOES_NOT_EXIST)
 
-    return "Show"
-
 app.run()
