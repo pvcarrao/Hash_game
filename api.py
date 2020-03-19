@@ -2,8 +2,8 @@ import flask
 from flask import request, jsonify
 
 from main.game import Game
-from shared.exceptions import GameDoesNotExist
-from shared.constants import GAME_DOES_NOT_EXIST
+from shared.exceptions import GameDoesNotExist, IncorrectPlayer
+from shared.constants import GAME_DOES_NOT_EXIST, INCORRECT_PLAYER
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -28,6 +28,10 @@ def movement(id):
         resp = Game().play_human(id, data["player"], data["position"])
         return jsonify(resp)    
     except GameDoesNotExist:
-        return jsonify(GAME_DOES_NOT_EXIST)
+        response = {"msg": GAME_DOES_NOT_EXIST, "status_code": 404}
+        return jsonify(response)
+    except IncorrectPlayer:
+        response = {"msg": INCORRECT_PLAYER, "status_code": 404}
+        return jsonify(response)
 
 app.run()

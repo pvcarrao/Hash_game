@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 from uuid import uuid4
 
-from shared.exceptions import GameDoesNotExist
+from shared.exceptions import GameDoesNotExist, IncorrectPlayer
 from shared.constants import (INCORRECT_PLAYER, MATCH_ENDED, RECORDED_MOVE, UNAVAILABLE_POSITION)
 
 class Game:
@@ -42,7 +42,7 @@ class Game:
         json_positions = json.dumps(positions)
         sql = f"INSERT INTO {self.table_name}{self.table_headers} VALUES('{game_id}', '{current_player}', '{json_positions}')"
         self.execute_sql(sql)
-        response = {"id": game_id, "first_player": current_player}
+        response = {"id": game_id, "first_player": current_player, "status_code": 200}
         return response
 
     def play_human(self, game_id, player, position_tuple):
@@ -51,7 +51,7 @@ class Game:
         if not game:
             raise GameDoesNotExist
         if game[0][1] != player:
-            return {"msg": INCORRECT_PLAYER}
+            raise IncorrectPlayer
         current_positions = json.loads(game[0][2])
         available_pos = []
         for pos in range(9):
@@ -71,12 +71,15 @@ class Game:
                 sql = f"UPDATE {self.table_name} SET current_player = 'X' WHERE game_id = '{game_id}'"
                 self.execute_sql(sql)              
             if self.has_won(current_positions, player):
-                return {"msg": MATCH_ENDED, "winner": player}
-            if available_pos.__le__ == 1:
-                return {"msg": MATCH_ENDED, "winner": "Draw"}
-            return {"msg": RECORDED_MOVE}
+                response = {"msg": MATCH_ENDED, "winner": player, "status_code": 200}
+            elif available_pos.__le__ == 1:
+                response = {"msg": MATCH_ENDED, "winner": "Draw", "status_code": 200}
+            else:
+                response = {"msg": RECORDED_MOVE, "status_code": 200}
+            return response
         else:
-            return {"msg": UNAVAILABLE_POSITION}
+            response = {"msg": UNAVAILABLE_POSITION, "status_code": 200}
+            return response
 
     def has_won(self, positions, player):
         for pos in self.winning_pos:
