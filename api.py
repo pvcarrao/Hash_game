@@ -2,8 +2,8 @@ import flask
 from flask import request, jsonify
 
 from main.game import Game
-from exceptions import GameDoesNotExist
-from constants import GAME_DOES_NOT_EXIST
+from shared.exceptions import GameDoesNotExist
+from shared.constants import GAME_DOES_NOT_EXIST
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True

@@ -4,14 +4,15 @@ import json
 from datetime import datetime
 from uuid import uuid4
 
-from exceptions import GameDoesNotExist
-from constants import (INCORRECT_PLAYER, MATCH_ENDED, RECORDED_MOVE, UNAVAIBLE_POSITION)
+from shared.exceptions import GameDoesNotExist
+from shared.constants import (INCORRECT_PLAYER, MATCH_ENDED, RECORDED_MOVE, UNAVAIBLE_POSITION)
 
 class Game:
     def __init__(self):
         self.table_name = "GAMES"
         self.database = "DATABASE.db"
         self.table_headers = "(game_id, current_player, positions)"
+        self.winning_pos = [[0, 1, 2], [3, 4, 6], [7, 8, 9], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
 
     def execute_sql(self, sql):
         conn = sqlite3.connect(database=self.database)
@@ -68,9 +69,13 @@ class Game:
             json_positions = json.dumps(current_positions)
             sql = f"UPDATE {self.table_name} SET positions = '{json_positions}' WHERE game_id = '{game_id}'"
             self.execute_sql(sql)
-            # TODO: check if has_won
-            # if has_won:
-            #    return [MATCH_ENDED, player]
+            self.has_won(current_positions, player)
             return RECORDED_MOVE
         else:
             return UNAVAIBLE_POSITION
+
+    def has_won(self, positions, player):
+        for pos in self.winning_pos:
+            if positions[pos[0]] == positions[pos[1]] == positions[pos[2]] == player:
+                return True
+        return False
