@@ -4,6 +4,8 @@ import json
 from datetime import datetime
 from uuid import uuid4
 
+from exceptions import GameDoesNotExist
+from constants import (INCORRECT_PLAYER, MATCH_ENDED, RECORDED_MOVE, UNAVAIBLE_POSITION)
 
 class Game:
     def __init__(self):
@@ -32,43 +34,44 @@ class Game:
         sql = "CREATE TABLE IF NOT EXISTS " + self.table_name + self.table_headers
         self.execute_sql(sql)
 
-    def pos_to_sql_string(self, positions):
-        sql_string = ""
-        for pos in positions:
-            sql_string = f"{sql_string}'{pos}', "
-        return sql_string[:-2]
-
     def new_game(self):
         game_id = datetime.now().strftime('%Y%m-%d%H-%M%S-') + str(uuid4())
         current_player = random.choice(["X", "O"])
-        positions = {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0}
+        # TODO: criar o dict de positions de uma forma menos bruta
+        positions = {"0": 0, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0}
         json_positions = json.dumps(positions)
-        # pos_string = self.pos_to_sql_string(positions)
         sql = f"INSERT INTO {self.table_name}{self.table_headers} VALUES('{game_id}', '{current_player}', '{json_positions}')"
         self.execute_sql(sql)
         response = [game_id, current_player]
         return response
 
-    def play_human(self, game_id, player, position):
+    def play_human(self, game_id, player, position_tuple):
 
         sql = f"SELECT * FROM {self.table_name} WHERE game_id = '{game_id}'"
         game = self.execute_sql(sql)
-        if game[0] != game_id:
-            return "Jogo inexistente"
+        if not game:
+            raise GameDoesNotExist
         if game[1] != player:
-            return "Jogador incorreto"
-        positions = json.loads(game[2])
+            return INCORRECT_PLAYER
+        current_positions = json.loads(game[2])
+        avaible_pos = []
+        for pos in range(9):
+            if current_positions[pos] == 0:
+                avaible_pos.append = pos
+        # TODO: converter a tupla em número da posição
+        position_number = 0
         
-        # if not existe essa entrada na db:
-        #     return "Jogo inexistente"
-        # if player != current_player retornado da DB:
-        #     return "jogador incorreto"
-        # avaible_pos = construir avaible positions de acordo com as posições que são 0 na DB
-        # if pos in self.available_pos:
-        #     registrar mudança na DB da posição
-        #     self.counter += (temos que pensar em como salvar esse counter)
-        # else:
-        #     return "Posição indisponível"
+        if position_number in avaible_pos:
+            current_positions[position_number] = player
+            json_positions = json.dumps(current_positions)
+            sql = f"UPDATE {self.table_headers} SET positions = '{json_positions}' WHERE game_id = '{game_id}'"
+            # TODO: check if has_won
+            if has_won:
+                return [MATCH_ENDED, player]
+            return RECORDED_MOVE
+        else:
+            return UNAVAIBLE_POSITION
+
 
 
 

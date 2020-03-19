@@ -2,6 +2,8 @@ import flask
 from flask import request, jsonify
 
 from main.game import Game
+from exceptions import GameDoesNotExist
+from constants import GAME_DOES_NOT_EXIST
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -21,10 +23,12 @@ def new_game():
 
 @app.route('/game/<id>/movement', methods=['POST'])
 def movement(id):
-    # try:
-    # except GameDoesNotExist:
     data = request.json
-    Game().play_human(id, data["player"], data["position"])
+    try:
+        resp = Game().play_human(id, data["player"], data["position"])
+        return jsonify(resp)    
+    except GameDoesNotExist:
+        return jsonify(GAME_DOES_NOT_EXIST)
 
     return "Show"
 
