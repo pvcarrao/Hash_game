@@ -78,7 +78,7 @@ class Game:
                 response = {"msg": RECORDED_MOVE, "status_code": 200}
             return response
         else:
-            response = {"msg": UNAVAILABLE_POSITION, "status_code": 200}
+            response = {"msg": UNAVAILABLE_POSITION, "status_code": 204}
             return response
 
     def has_won(self, positions, player):
