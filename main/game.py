@@ -23,10 +23,6 @@ class Game:
             selected = c.fetchall()
         else:
             selected = None
-        # TODO: remover duas próximas linhas
-        c.execute(f"SELECT * FROM {self.table_name}")
-        print(c.fetchall())
-
         conn.close
         if selected:
             return selected
@@ -42,7 +38,6 @@ class Game:
     def new_game(self):
         game_id = datetime.now().strftime('%Y%m-%d%H-%M%S-') + str(uuid4())
         current_player = random.choice(["X", "O"])
-        # TODO: criar o dict de positions de uma forma menos bruta
         positions = {"0": 0, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0}
         json_positions = json.dumps(positions)
         sql = f"INSERT INTO {self.table_name}{self.table_headers} VALUES('{game_id}', '{current_player}', '{json_positions}')"
@@ -69,13 +64,16 @@ class Game:
             json_positions = json.dumps(current_positions)
             sql = f"UPDATE {self.table_name} SET positions = '{json_positions}' WHERE game_id = '{game_id}'"
             self.execute_sql(sql)
-            self.has_won(current_positions, player)
+            if self.has_won(current_positions, player):
+                return [MATCH_ENDED, player]
+            if avaible_pos.__le__ == 1:
+                return [MATCH_ENDED, "Draw"]
             return RECORDED_MOVE
         else:
             return UNAVAIBLE_POSITION
 
     def has_won(self, positions, player):
         for pos in self.winning_pos:
-            if positions[pos[0]] == positions[pos[1]] == positions[pos[2]] == player:
+            if positions[str(pos[0])] == positions[str(pos[1])] == positions[str(pos[2])] == player:
                 return True
         return False
