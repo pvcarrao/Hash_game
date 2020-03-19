@@ -29,6 +29,10 @@ class Game:
         conn.close
         if selected:
             return selected
+    
+    def pos_tuple_to_int(self, tuple):
+        converted_pos = tuple["x"] + 3*tuple["y"]
+        return converted_pos
 
     def create_table(self):
         sql = f"CREATE TABLE IF NOT EXISTS {self.table_name}{self.table_headers}"
@@ -57,8 +61,7 @@ class Game:
         for pos in range(9):
             if current_positions[str(pos)] == 0:
                 avaible_pos.append(pos)
-        # TODO: converter a tupla em número da posição
-        position_number = 1
+        position_number = self.pos_tuple_to_int(position_tuple)
         
         if position_number in avaible_pos:
             current_positions[str(position_number)] = player
