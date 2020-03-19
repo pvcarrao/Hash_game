@@ -8,7 +8,7 @@ class Game:
         self.database = "database.db"
 
     def create_database(self):
-        sql = "CREATE TABLE IF NOT EXISTS" + self.table_name  + "(game_id, player, X, Y)"
+        sql = "CREATE TABLE IF NOT EXISTS" + self.table_name  + "(game_id, player, pos_x, pos_y)"
         self.execute_sql
 
     def execute_sql(self, sql):
