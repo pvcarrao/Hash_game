@@ -17,7 +17,8 @@ source venv/bin/activate
 On Windows:
 ```bash
 py -m venv venv
-venv/Scripts/activate.bat
+cd venv/Scripts
+activate.bat
 ```
 
 ### 2. Install requirements
