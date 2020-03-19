@@ -8,11 +8,16 @@ Remember to also install pip.
 
 We recomend using venv to manage your environment (Optional)
 
-On Linux:
+Linux (Debian/Ubuntu):
 ```bash
 apt-get install python3-venv
 python3 -m venv venv
 source venv/bin/activate
+```
+On Windows:
+```bash
+py -m venv venv
+venv/Scripts/activate.bat
 ```
 
 ### 2. Install requirements
@@ -31,8 +36,14 @@ pip install flask
 
 On the repository root directory:
 
+Linux (Debian/Ubuntu):
 ```bash
 python3 api.py
+```
+
+Windows:
+```bash
+py api.py
 ```
 
 The API shoud be running now on http://localhost:5000/
