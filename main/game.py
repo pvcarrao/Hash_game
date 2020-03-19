@@ -71,12 +71,3 @@ class Game:
             return RECORDED_MOVE
         else:
             return UNAVAIBLE_POSITION
-
-
-
-
-# TODO: remover proximas 3 linhas, sendo usadas só pra debugar
-game_id = "202003-1901-0527-9bd78091-328e-4041-9df7-ee6fa4236a9c"
-player = "X"
-pos = [0, 0]
-# Game().play_human
