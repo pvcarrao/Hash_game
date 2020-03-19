@@ -4,17 +4,18 @@ import sqlite3
 
 class Game:
     def __init__(self):
-        self.table_name = "games"
-        self.database = "database.db"
+        self.table_name = "GAMES"
+        self.database = "DATABASE.db"
 
-    def create_database(self):
-        sql = "CREATE TABLE IF NOT EXISTS" + self.table_name  + "(game_id, player, pos_x, pos_y)"
-        self.execute_sql
+    def create_table(self):
+        sql = "CREATE TABLE IF NOT EXISTS " + self.table_name  + "(game_id, player, pos_x, pos_y)"
+        self.execute_sql(sql)
 
     def execute_sql(self, sql):
         conn = sqlite3.connect(database=self.database)
         c = conn.cursor()
         c.execute(sql)
+        # TODO: remover próximas 2 linhas, usada só para debugar
         c.execute("SELECT * FROM GAMES")
         print(c.fetchone())
         conn.commit()
@@ -29,5 +30,5 @@ class Game:
         database = sqlite3.connect("games.db")
         cursor = database.cursor()
 
-Game().create_database()
+Game().create_table()
 
