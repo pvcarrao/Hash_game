@@ -1,12 +1,12 @@
 import flask
 from flask import request, jsonify
 
-from .main.game import Game
+from main import Game
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-Game().create_database()
+Game().create_table()
 
 @app.route('/', methods=['GET'])
 def home():
