@@ -1,13 +1,13 @@
 ## Getting started
 
-### 1. Install python
+### 1. Install python 3.6.9
 
 - Python 3.6.9
 
 We recomend using Pyenv to manage your environment
 [pyenv](https://github.com/pyenv/pyenv#installation).
 pyenv-installer is also recomended
-[pyenv-installer] (https://github.com/pyenv/pyenv-installer)
+[pyenv-installer](https://github.com/pyenv/pyenv-installer)
 
 ```bash
 # installing pyenv and python
