@@ -6,8 +6,9 @@
 
 We recomend using Pyenv to manage your environment
 [pyenv](https://github.com/pyenv/pyenv#installation).
+
 pyenv-installer is also recomended
-[pyenv-installer](https://github.com/pyenv/pyenv-installer)
+[pyenv-installer](https://github.com/pyenv/pyenv-installer).
 
 ```bash
 # installing pyenv and python
@@ -43,14 +44,15 @@ The API shoud be running now on http://localhost:5000/
 
 Request:
 
-http://127.0.0.1:5000/game - Method: POST
+http://localhost:5000/game - Method: POST
 
 This request creates a new game on your local database and returns the game_id and the first player of the match.
 
-http://127.0.0.1:5000/game/{{id}}/movement - Method: POST
+http://localhost:5000/game/{{id}}/movement - Method: POST
 
-You should send a game_id on the request url
-And you should also send a body on the Post with a json and the following information: The player who is attempting to play and the coordinates of his move. Here is an example:
+You should send a game_id on the request url.
+
+You should also send a body on the Post with a json and the following information: The player who is attempting to play and the coordinates of his move. Here is an example:
 
 ```bash
 {
