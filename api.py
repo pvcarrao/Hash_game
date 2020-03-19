@@ -10,10 +10,6 @@ app.config["DEBUG"] = True
 
 Game().create_table()
 
-@app.route('/', methods=['GET'])
-def home():
-    return "<h1>Bem vindo ao jogo da velha da galera </h1>"
-
 
 @app.route('/game', methods=['POST'])
 def new_game():

@@ -15,6 +15,13 @@ class Game:
         self.winning_pos = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
 
     def execute_sql(self, sql):
+        """Execute an SQL command on local database
+        Arguments:
+            sql {str} -- ex: "CREATE TABLE IF NOT EXISTS GAMES(game_id, current_player, positions)"
+        Returns:
+            Selected items from database if using SELECT command on SQL command
+            None if not using SELECT
+        """
         conn = sqlite3.connect(database=self.database)
         c = conn.cursor()
         c.execute(sql)
@@ -28,14 +35,33 @@ class Game:
             return selected
     
     def pos_tuple_to_int(self, tuple):
+        """Converts a tuple of positions on the boar to an integer
+        Arguments:
+            tuple {tuple} -- ex: "summary_today"
+        Returns:
+            Selected items from database if using SELECT command on SQL command
+            None if not using SELECT
+        """
         converted_pos = tuple["x"] + 3*tuple["y"]
         return converted_pos
 
     def create_table(self):
+        """Create database table if it does not exist
+        Arguments:
+            None
+        Returns:
+            None
+        """
         sql = f"CREATE TABLE IF NOT EXISTS {self.table_name}{self.table_headers}"
         self.execute_sql(sql)
 
     def new_game(self):
+        """Creates a new game in database
+        Arguments:
+            None
+        Returns:
+            dict with the new game basic data
+        """
         game_id = datetime.now().strftime('%Y%m-%d%H-%M%S-') + str(uuid4())
         current_player = random.choice(["X", "O"])
         positions = {"0": 0, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0}
@@ -46,6 +72,14 @@ class Game:
         return response
 
     def play_human(self, game_id, player, position_tuple):
+        """Register a move from the user in the database
+        Arguments:
+            game_id {str} -- ex: "202003-1904-0540-3513d970-a741-46e9-9224-8705bebd89fc"
+            player {str} -- ex: "X"
+            position_tuple {tuple} -- ex: "{'x': 2, 'y': 2}"
+        Returns:
+            Response to frontend with the movement results
+        """
         sql = f"SELECT * FROM {self.table_name} WHERE game_id = '{game_id}'"
         game = self.execute_sql(sql)
         if not game:
@@ -82,6 +116,14 @@ class Game:
             return response
 
     def has_won(self, positions, player):
+        """Checks if a player has won the game
+        Arguments:
+            player {str} -- ex: "X"
+            positions {dict} -- ex: "{'0': 0, '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 'X'}"
+        Returns:
+            True if the player won.
+            False if not.
+        """
         for pos in self.winning_pos:
             if positions[str(pos[0])] == positions[str(pos[1])] == positions[str(pos[2])] == player:
                 return True
