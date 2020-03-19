@@ -4,33 +4,30 @@
 
 - Python 3.6.9
 
-We recomend using Pyenv to manage your environment
-[pyenv](https://github.com/pyenv/pyenv#installation).
+Remember to also install pip.
 
-pyenv-installer is also recomended
-[pyenv-installer](https://github.com/pyenv/pyenv-installer).
+We recomend using venv to manage your environment (Optional)
 
+On Linux:
 ```bash
-# installing pyenv and python
-curl https://pyenv.run | bash
-exec $SHELL
-pyenv install 3.6.9
+apt-get install python3-venv
+python3 -m venv venv
+source venv/bin/activate
 ```
 
-### 2. Create a virtual environment and activate it.
-
-```bash
-# Using pyenv
-pyenv virtualenv 3.6.9 venv-api
-pyenv local venv-api
-```
-
-### 3. Install requirements
+### 2. Install requirements
 
 ```bash
 pip install -r requirements.txt
 ```
-### 4. Run the API
+
+or you can install the requirements manually
+
+```bash
+pip install flask
+```
+
+### 3. Run the API
 
 On the repository root directory:
 
