@@ -51,13 +51,11 @@ The API shoud be running now on http://localhost:5000/
 
 ## Using the API
 
-Request:
+POST: http://localhost:5000/game
 
-http://localhost:5000/game - Method: POST
+This request creates a new game on your local database and returns the game_id and the first player of the match. Empty body.
 
-This request creates a new game on your local database and returns the game_id and the first player of the match.
-
-http://localhost:5000/game/{{id}}/movement - Method: POST
+POST: http://localhost:5000/game/{{id}}/movement
 
 You should send a game_id on the request url.
 
